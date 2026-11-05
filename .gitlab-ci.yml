@@ -4,6 +4,8 @@ stages:
   
 variables:
   PROJECT_NAME: ADONIS_PROJECT
+  JAVA_OPTS: ${JAVA_OPTS}
+
 
 # Build stage
 build-job:
@@ -12,7 +14,10 @@ build-job:
   only:
     - main
   script:
-    - echo "Building the project..."
+    - echo "Building the project ${PROJECT_NAME}-test."
+    - echo "Java options are ${JAVA_OPTS}"
+    - echo "My Secret is that ${MY_SECRET}"
+    - echo "The source of the pipeline trigger is $CI_PIPELINE_SOURCE for the branch $CI_COMMIT_BRANCH"
     - mvn install 
 
 # Test stage
@@ -22,6 +27,6 @@ test-job:
   only:
     - main
   script:
-    - echo "Running Unit Tests in the project ..."
+    - echo "Running Unit Tests in the project ${PROJECT_NAME}-test."
     - mvn test
     - mvn checkstyle:checkstyle
