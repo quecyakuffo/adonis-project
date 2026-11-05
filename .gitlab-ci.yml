@@ -1,70 +1,95 @@
 stages:
   - build
   - test
+  - code-analysis
   - security
-  
+
 variables:
   PROJECT_NAME: ADONIS_PROJECT
-  JAVA_OPTS: ${JAVA_OPTS}
+  # Cache Maven dependencies inside the project dir so they can be reused between jobs
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
 
+# Shared settings reused by every job via `extends`
+.default-rules:
+  rules:
+    # Trigger on pushes to the main or develop
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
+    # Trigger on merge requests
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    # Trigger when started manually
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    # Trigger on schedules
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    # Otherwise, do not run the job
+    - when: never
+
+.maven-job:
+  extends: .default-rules
+  image: maven:3.9.9-eclipse-temurin-17
+  cache:
+    key: maven-$CI_COMMIT_REF_SLUG
+    paths:
+      - .m2/repository
 
 # Build stage
 build-job:
   stage: build
-  image: maven:3.9.9-eclipse-temurin-17
-  rules:
-     # Trigger on pushes to the main or develop
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
-     # Trigger on merge requests to the main or develop
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-     # Trigger when started manually
-    - if: '$CI_PIPELINE_SOURCE == "web"'
-     # Trigger on schedules
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-    # otherwise, do not run the job
-    - when: never
+  extends: .maven-job
   script:
-    - echo "Building the project ${PROJECT_NAME}-test."
-    - mvn clean install
+    - echo "Building the project ${PROJECT_NAME}."
+    - mvn clean install -DskipTests
   after_script:
-    - ls -la
+    - ls -la target
   artifacts:
     paths:
-      - target/*.jar
+      - target/*.war
     when: always
 
 # Test stage
 test-job:
   stage: test
-  image: maven:3.9.9-eclipse-temurin-17
+  extends: .maven-job
   needs: ["build-job"]
-  rules:
-     # Trigger on pushes to the main or develop
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
-     # Trigger on merge requests to the main or develop
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-     # Trigger when started manually
-    - if: '$CI_PIPELINE_SOURCE == "web"'
-     # Trigger on schedules
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-    # otherwise, do not run the job
-    - when: never
   script:
-    - echo "Running Unit Tests in the project ${PROJECT_NAME}-test."
+    - echo "Running Unit Tests in the project ${PROJECT_NAME}."
     - mvn test
-    - mvn checkstyle:checkstyle
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
 
-  security-scan:
-  stage: test
-  image: aquasec/trivy:latest
-  entryypoint: [""]
+# Code analysis stage - Checkstyle
+checkstyle-job:
+  stage: code-analysis
+  extends: .maven-job
   needs: ["build-job"]
   script:
-    - trivy fs --format json --exit-code 0 --vuln-type os,library . --output trivy-results.json
+    - echo "Running Checkstyle analysis on ${PROJECT_NAME}."
+    - mvn checkstyle:checkstyle
+  after_script:
+    - ls -la target/checkstyle-result.xml || true
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - target/checkstyle-result.xml
+      - target/site/checkstyle.html
+
+# Security stage - Trivy filesystem scan
+security-scan:
+  stage: security
+  extends: .default-rules
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  needs: ["build-job"]
+  script:
+    - trivy fs --format json --exit-code 0 --scanners vuln --output trivy-results.json .
   after_script:
     - ls -la
   artifacts:
     paths:
       - trivy-results.json
     when: always
-  
