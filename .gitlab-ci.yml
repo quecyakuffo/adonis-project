@@ -11,21 +11,36 @@ variables:
 build-job:
   stage: build
   image: maven:3.9.9-eclipse-temurin-17
-  only:
-    - main
+  rules:
+     # Trigger on pushes to the main or develop
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
+     # Trigger on merge requests to the main or develop
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+     # Trigger when started manually
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+     # Trigger on schedules
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    # otherwise, do not run the job
+    - when: never
   script:
     - echo "Building the project ${PROJECT_NAME}-test."
-    - echo "Java options are ${JAVA_OPTS}"
-    - echo "My Secret is that ${MY_SECRET}"
-    - echo "The source of the pipeline trigger is $CI_PIPELINE_SOURCE for the branch $CI_COMMIT_BRANCH"
-    - mvn install 
+    - mvn clean install
 
 # Test stage
 test-job:
   stage: test
   image: maven:3.9.9-eclipse-temurin-17
-  only:
-    - main
+  rules:
+     # Trigger on pushes to the main or develop
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
+     # Trigger on merge requests to the main or develop
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+     # Trigger when started manually
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+     # Trigger on schedules
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    # otherwise, do not run the job
+    - when: never
   script:
     - echo "Running Unit Tests in the project ${PROJECT_NAME}-test."
     - mvn test
