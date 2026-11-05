@@ -25,11 +25,18 @@ build-job:
   script:
     - echo "Building the project ${PROJECT_NAME}-test."
     - mvn clean install
+  after_script:
+    - ls -la
+  artifacts:
+    paths:
+      - target/*.jar
+    when: always
 
 # Test stage
 test-job:
   stage: test
   image: maven:3.9.9-eclipse-temurin-17
+  needs: ["build-job"]
   rules:
      # Trigger on pushes to the main or develop
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
@@ -45,3 +52,18 @@ test-job:
     - echo "Running Unit Tests in the project ${PROJECT_NAME}-test."
     - mvn test
     - mvn checkstyle:checkstyle
+
+  security-scan:
+  stage: test
+  image: aquasec/trivy:latest
+  entryypoint: [""]
+  needs: ["build-job"]
+  script:
+    - trivy fs --format json --exit-code 0 --vuln-type os,library . --output trivy-results.json
+  after_script:
+    - ls -la
+  artifacts:
+    paths:
+      - trivy-results.json
+    when: always
+  
