@@ -105,11 +105,31 @@
     <groupId>org.elasticsearch.client</groupId>
     <artifactId>elasticsearch-rest-high-level-client</artifactId>
     <version>${elasticsearch.version}</version>
+    <exclusions>
+        <!-- org.lz4 is abandoned; replaced by the maintained fork below (CVE-2025-12183, CVE-2025-66566, CVE-2026-106451) -->
+        <exclusion>
+            <groupId>org.lz4</groupId>
+            <artifactId>lz4-java</artifactId>
+        </exclusion>
+    </exclusions>
 </dependency>
 <dependency>
     <groupId>org.elasticsearch</groupId>
     <artifactId>elasticsearch</artifactId>
     <version>${elasticsearch.version}</version>
+    <exclusions>
+        <!-- org.lz4 is abandoned; replaced by the maintained fork below (CVE-2025-12183, CVE-2025-66566, CVE-2026-106451) -->
+        <exclusion>
+            <groupId>org.lz4</groupId>
+            <artifactId>lz4-java</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <!-- Maintained fork of lz4-java (same net.jpountz packages), used by Elasticsearch -->
+    <groupId>at.yawk.lz4</groupId>
+    <artifactId>lz4-java</artifactId>
+    <version>1.13.0</version>
 </dependency>
         <dependency>
             <groupId>org.springframework.amqp</groupId>

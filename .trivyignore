@@ -5,3 +5,9 @@
 # (views are JSPs via InternalResourceViewResolver), so the vulnerable code path is unreachable.
 # Reviewed: 2026-11-06
 CVE-2026-47884
+
+# spring-webmvc/spring-webflux: stream corruption in Server-Sent Events (SSE) with view rendering.
+# Only fixed in Spring 7.0.9 (no Spring 6.x fix). This app has no SSE endpoints
+# (no SseEmitter / ResponseBodyEmitter / text/event-stream / WebFlux), so it is not exposed.
+# Reviewed: 2026-11-06
+CVE-2026-47890
