@@ -3,6 +3,7 @@ stages:
   - test
   - code-analysis
   - security
+  - publish
 
 variables:
   PROJECT_NAME: ADONIS_PROJECT
@@ -131,6 +132,36 @@ security-scan:
     paths:
       - trivy-results.json
     when: always
+
+# Publish stage - build the Docker image and push it to the GitLab Container Registry
+docker-build-publish:
+  stage: publish
+  image: docker:27
+  services:
+    - docker:27-dind          # sidecar that runs the Docker daemon
+  # Only publish if tests, Checkstyle and the security scan all passed.
+  # artifacts: false = don't download their reports (not needed to build the image)
+  needs:
+    - job: test-job
+      artifacts: false
+    - job: checkstyle-job
+      artifacts: false
+    - job: security-scan
+      artifacts: false
+  rules:
+    # Only publish from main (not from feature branches or merge requests)
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"   # encrypted connection between job and dind sidecar
+    IMAGE_TAG: $CI_COMMIT_SHA
+  before_script:
+    - echo "Logging in to GitLab Container Registry..."
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script:
+    - echo "Building Docker image with the multistage Dockerfile..."
+    - docker build -f Docker-files/app/multistage/Dockerfile -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
+    - docker push "$CI_REGISTRY_IMAGE:latest"
 
 # Notify Slack when any job in the pipeline fails.
 # Requires a masked CI/CD variable SLACK_WEBHOOK_URL (Settings > CI/CD > Variables).

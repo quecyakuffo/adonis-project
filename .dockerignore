@@ -1,0 +1,11 @@
+# Keep the Docker build context small: only source + pom are needed to build the WAR
+.git
+.m2
+.trivycache
+target
+trivy-results.json
+ansible
+vagrant
+Docker-files/db
+Docker-files/web
+*.md
