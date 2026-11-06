@@ -49,7 +49,6 @@ classpath:/Users/richardakuffo/.m2/repository/com/fasterxml/jackson/dataformat/j
 classpath:/Users/richardakuffo/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-cbor/2.21.8/jackson-dataformat-cbor-2.21.8.jar	73714:1792268873000
 classpath:/Users/richardakuffo/.m2/repository/org/elasticsearch/elasticsearch-geo/7.17.29/elasticsearch-geo-7.17.29.jar	53094:1750756670000
 classpath:/Users/richardakuffo/.m2/repository/org/elasticsearch/elasticsearch-lz4/7.17.29/elasticsearch-lz4-7.17.29.jar	28485:1750756670000
-classpath:/Users/richardakuffo/.m2/repository/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar	682804:1624084292000
 classpath:/Users/richardakuffo/.m2/repository/org/apache/lucene/lucene-core/8.11.3/lucene-core-8.11.3.jar	3611977:1707431453000
 classpath:/Users/richardakuffo/.m2/repository/org/apache/lucene/lucene-analyzers-common/8.11.3/lucene-analyzers-common-8.11.3.jar	1785589:1707431508000
 classpath:/Users/richardakuffo/.m2/repository/org/apache/lucene/lucene-backward-codecs/8.11.3/lucene-backward-codecs-8.11.3.jar	155061:1707431377000
@@ -70,6 +69,7 @@ classpath:/Users/richardakuffo/.m2/repository/joda-time/joda-time/2.12.6/joda-ti
 classpath:/Users/richardakuffo/.m2/repository/com/tdunning/t-digest/3.2/t-digest-3.2.jar	51208:1502065450000
 classpath:/Users/richardakuffo/.m2/repository/org/hdrhistogram/HdrHistogram/2.1.9/HdrHistogram-2.1.9.jar	114165:1463582011000
 classpath:/Users/richardakuffo/.m2/repository/net/java/dev/jna/jna/5.10.0/jna-5.10.0.jar	1756400:1636399762000
+classpath:/Users/richardakuffo/.m2/repository/at/yawk/lz4/lz4-java/1.13.0/lz4-java-1.13.0.jar	825682:1793825998000
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/amqp/spring-rabbit/3.2.12/spring-rabbit-3.2.12.jar	631473:1782321694000
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/amqp/spring-amqp/3.2.12/spring-amqp-3.2.12.jar	162655:1782321694000
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/retry/spring-retry/2.0.13/spring-retry-2.0.13.jar	161244:1780944725000

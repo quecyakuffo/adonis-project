@@ -1,4 +1,4 @@
-classpath:/Users/richardakuffo/Desktop/gitlab/adonis-project/target/classes	25:5191a829fb329f4ac234c85d85a04bcc355b3817ee1cc2341926fe5ebef9d72e
+classpath:/Users/richardakuffo/Desktop/gitlab/adonis-project/target/classes	25:04e16c6f052e2d4c14ed604f4770b65203e012494dcdd66692f1b43f7fd5c3e2
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/spring-web/6.2.19/spring-web-6.2.19.jar	2096068:1780938627000
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/spring-beans/6.2.19/spring-beans-6.2.19.jar	891594:1780938627000
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/spring-core/6.2.19/spring-core-6.2.19.jar	1983775:1780938627000
@@ -59,7 +59,6 @@ classpath:/Users/richardakuffo/.m2/repository/com/fasterxml/jackson/dataformat/j
 classpath:/Users/richardakuffo/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-cbor/2.21.8/jackson-dataformat-cbor-2.21.8.jar	73714:1792268873000
 classpath:/Users/richardakuffo/.m2/repository/org/elasticsearch/elasticsearch-geo/7.17.29/elasticsearch-geo-7.17.29.jar	53094:1750756670000
 classpath:/Users/richardakuffo/.m2/repository/org/elasticsearch/elasticsearch-lz4/7.17.29/elasticsearch-lz4-7.17.29.jar	28485:1750756670000
-classpath:/Users/richardakuffo/.m2/repository/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar	682804:1624084292000
 classpath:/Users/richardakuffo/.m2/repository/org/apache/lucene/lucene-core/8.11.3/lucene-core-8.11.3.jar	3611977:1707431453000
 classpath:/Users/richardakuffo/.m2/repository/org/apache/lucene/lucene-analyzers-common/8.11.3/lucene-analyzers-common-8.11.3.jar	1785589:1707431508000
 classpath:/Users/richardakuffo/.m2/repository/org/apache/lucene/lucene-backward-codecs/8.11.3/lucene-backward-codecs-8.11.3.jar	155061:1707431377000
@@ -81,6 +80,7 @@ classpath:/Users/richardakuffo/.m2/repository/com/tdunning/t-digest/3.2/t-digest
 classpath:/Users/richardakuffo/.m2/repository/org/hdrhistogram/HdrHistogram/2.1.9/HdrHistogram-2.1.9.jar	114165:1463582011000
 classpath:/Users/richardakuffo/.m2/repository/net/java/dev/jna/jna/5.10.0/jna-5.10.0.jar	1756400:1636399762000
 classpath:/Users/richardakuffo/.m2/repository/org/elasticsearch/elasticsearch-plugin-classloader/7.17.29/elasticsearch-plugin-classloader-7.17.29.jar	14349:1750756668000
+classpath:/Users/richardakuffo/.m2/repository/at/yawk/lz4/lz4-java/1.13.0/lz4-java-1.13.0.jar	825682:1793825998000
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/amqp/spring-rabbit/3.2.12/spring-rabbit-3.2.12.jar	631473:1782321694000
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/amqp/spring-amqp/3.2.12/spring-amqp-3.2.12.jar	162655:1782321694000
 classpath:/Users/richardakuffo/.m2/repository/org/springframework/retry/spring-retry/2.0.13/spring-retry-2.0.13.jar	161244:1780944725000
