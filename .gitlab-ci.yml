@@ -85,8 +85,32 @@ security-scan:
     name: aquasec/trivy:latest
     entrypoint: [""]
   needs: ["build-job"]
+  cache:
+    # Reuse the Maven repo populated by build-job (read-only) so Trivy can resolve
+    # parent POMs/BOMs locally instead of hitting Maven Central (which rate-limits shared runners)
+    - key: maven-$CI_COMMIT_REF_SLUG
+      paths:
+        - .m2/repository
+      policy: pull
+    # Cache the Trivy vulnerability DB between pipelines
+    - key: trivy-db
+      paths:
+        - .trivycache/
   script:
-    - trivy fs --format json --exit-code 0 --scanners vuln --output trivy-results.json .
+    # Trivy looks for the local Maven repo in ~/.m2/repository
+    - mkdir -p "$HOME/.m2"
+    - ln -sfn "$CI_PROJECT_DIR/.m2/repository" "$HOME/.m2/repository"
+    - >
+      trivy fs
+      --cache-dir .trivycache/
+      --offline-scan
+      --skip-dirs .m2
+      --skip-dirs .trivycache
+      --scanners vuln
+      --format json
+      --exit-code 0
+      --output trivy-results.json
+      .
   after_script:
     - ls -la
   artifacts:
