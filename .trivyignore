@@ -1,0 +1,7 @@
+# Vulnerabilities accepted after review. Revisit when upgrading to Spring Framework 7.
+
+# spring-webmvc: RCE via improper path limitation in XsltView.
+# Only fixed in Spring 7.0.9 (no Spring 6.x fix). This app does not use XsltView
+# (views are JSPs via InternalResourceViewResolver), so the vulnerable code path is unreachable.
+# Reviewed: 2026-11-06
+CVE-2026-47884

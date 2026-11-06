@@ -131,3 +131,35 @@ security-scan:
     paths:
       - trivy-results.json
     when: always
+
+# Notify Slack when any job in the pipeline fails.
+# Requires a masked CI/CD variable SLACK_WEBHOOK_URL (Settings > CI/CD > Variables).
+notify-failure:
+  stage: .post   # built-in stage that always runs last
+  image:
+    name: curlimages/curl:8.10.1
+    entrypoint: [""]
+  rules:
+    # Skip quietly if the webhook hasn't been configured
+    - if: '$SLACK_WEBHOOK_URL == null || $SLACK_WEBHOOK_URL == ""'
+      when: never
+    # Same triggers as the other jobs, but only run when something failed
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
+      when: on_failure
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: on_failure
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: on_failure
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: on_failure
+    - when: never
+  cache: []
+  dependencies: []   # don't download artifacts from earlier jobs
+  script:
+    - |
+      REF="${CI_COMMIT_REF_NAME}"
+      TEXT=":red_circle: *Pipeline failed* for *${CI_PROJECT_PATH}*\n*Branch:* \`${REF}\`\n*Commit:* <${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHA}|${CI_COMMIT_SHORT_SHA}>\n*Triggered by:* ${GITLAB_USER_LOGIN}\n<${CI_PIPELINE_URL}|View pipeline #${CI_PIPELINE_IID}>"
+      curl --fail --silent --show-error -X POST \
+        -H 'Content-Type: application/json' \
+        --data "{\"text\": \"${TEXT}\"}" \
+        "$SLACK_WEBHOOK_URL"
